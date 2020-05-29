@@ -27,10 +27,22 @@ def tweepysearch(search, number, count):
 
     api = tweepy.API(auth)
     for tweet in tweepy.Cursor(api.search, q=search, tweet_mode='extended', include_entities=True).items(numberOfTweets):
-        if tweet.favorite_count > count or tweet.retweet_count > count:
-            print(f"{tweet.retweet_count}|{tweet.favorite_count} - {tweet.user.name} {tweet.user.screen_name}: {tweet.full_text}\nhttps://twitter.com/{tweet.user.screen_name}/status/{tweet.id}\n")
-            print(tweet)
-            print('\n\n\n\n\n\n\n\n\n\n')
+        if tweet.favorite_count >= count or tweet.retweet_count >= count:
+            print(
+                f"{tweet.retweet_count}|{tweet.favorite_count}\n"
+                f"{tweet.user.name} ({tweet.user.screen_name})\n"
+                f"{tweet.full_text}\n"
+                f"https://twitter.com/{tweet.user.screen_name}/status/{tweet.id}"
+                )
+            try:
+                # print(tweet['entities=']['urls']['expanded_url'])
+                print(tweet.entities['urls'][0]['expanded_url'])
+                # print(tweet.entities.user_mentions)
+            except Exception as e:
+                print('No url')
+                # pass
+            # print(tweet)
+            print('\n')
 
 if __name__ == '__main__':
     tweepysearch(str(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
